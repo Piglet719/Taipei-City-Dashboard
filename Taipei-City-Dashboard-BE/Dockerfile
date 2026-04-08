@@ -95,6 +95,9 @@ RUN apt-get update && \
     update-ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
+# 安裝 air（hot-reload 工具）
+RUN go install github.com/air-verse/air@latest
+
 RUN set -eux; \
     if [ "$TARGETARCH" = "amd64" ]; then \
         URL="https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-x64-1.23.2.tgz"; \
@@ -111,12 +114,11 @@ RUN set -eux; \
 
 ENV LD_LIBRARY_PATH=/usr/lib
 ENV GOCACHE=/tmp/go-build-cache
+ENV PATH=$PATH:/root/go/bin
 
 COPY --from=model_export /out/onnx-e5 /opt/lm_model/onnx-e5
 
 WORKDIR /app
 EXPOSE 8080
 
-RUN useradd -r -u 10001 appuser
-USER 10001
-CMD ["go", "run", "main.go"]
+CMD ["air", "-c", ".air.toml"]
