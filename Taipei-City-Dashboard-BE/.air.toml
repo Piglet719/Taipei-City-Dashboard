@@ -1,0 +1,37 @@
+# air 設定檔 - 本地開發 hot-reload
+root = "."
+tmp_dir = "/tmp/air"
+
+[build]
+  # 建置指令
+  cmd = "go build -o /tmp/air/TaipeiCityDashboardBE ."
+  # 建置完成後執行的 binary
+  bin = "/tmp/air/TaipeiCityDashboardBE"
+  # 監聽這些副檔名的檔案變更
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  # 排除以下目錄
+  exclude_dir = ["vendor", "testdata", "logs"]
+  # 排除以下檔案
+  exclude_file = []
+  # 排除未變更的檔案
+  exclude_unchanged = true
+  # 使用 polling 偵測（Docker volume mount 需要）
+  poll = true
+  poll_interval = 500
+  # build 失敗時不停止
+  stop_on_error = false
+  # build log 路徑（空字串 = 不輸出到檔案）
+  log = ""
+
+[log]
+  time = true
+
+[color]
+  main = "magenta"
+  watcher = "cyan"
+  build = "yellow"
+  runner = "green"
+
+[misc]
+  # 結束時清除 tmp_dir
+  clean_on_exit = true
